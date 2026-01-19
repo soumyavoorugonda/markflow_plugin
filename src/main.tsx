@@ -6,7 +6,6 @@ import type { MarkflowData } from "./types";
 import type {Tool} from './MarkflowApp';
 import * as React from "react";
 
-let setActiveTool: ((tool: Tool) => void) | null = null;
 let lastActiveTool: Tool = "pencil";
 
 export default class MarkFlow extends Plugin {
@@ -19,12 +18,12 @@ export default class MarkFlow extends Plugin {
 		// This creates an icon in the left ribbon.
 		this.addRibbonIcon('pencil', "Insert Markflow block", () => {
 			// Called when the user clicks the icon.
-			this.app.workspace.trigger("command:insert-markflow-block");
+			this.app.workspace.trigger("insert-markflow-block");
 		});
 
 		this.addCommand({
 			id: "insert-markflow-block",
-			name: "Insert markflow block",
+			name: "Insert Markflow block",
 			editorCallback: (editor: Editor) => {
 				const cursor = editor.getCursor();
 
@@ -44,7 +43,7 @@ export default class MarkFlow extends Plugin {
 
 		// This adds a status bar item to the bottom of the app. Does not work on mobile apps.
 		const statusBarItemEl = this.addStatusBarItem();
-		statusBarItemEl.setText('MarkFlow loaded');
+		statusBarItemEl.setText('Markflow loaded');
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
 		this.addSettingTab(new MarkFlowSettingTab(this.app, this));
@@ -56,7 +55,7 @@ export default class MarkFlow extends Plugin {
 				const app = this.app;
 				let data: MarkflowData;
 				try {
-					data = JSON.parse(source);
+					data = JSON.parse(source) as MarkflowData;
 				}
 				catch {
 					data = { width: 800, height: 500, elements: [] };
@@ -80,12 +79,6 @@ export default class MarkFlow extends Plugin {
 					data: MarkflowData;
 				}) {
 					const [tool, setTool] = React.useState<Tool>(lastActiveTool);
-
-					setActiveTool = setTool;
-					function handleToolChange(t: Tool) {
-						lastActiveTool = t;
-						setTool(t);
-					}
 
 					return (
 						<MarkflowApp
@@ -160,21 +153,5 @@ export default class MarkFlow extends Plugin {
 
 	async saveSettings() {
 		await this.saveData(this.settings);
-	}
-}
-
-class SampleModal extends Modal {
-	constructor(app: App) {
-		super(app);
-	}
-
-	onOpen() {
-		let {contentEl} = this;
-		contentEl.setText('Woah!');
-	}
-
-	onClose() {
-		const {contentEl} = this;
-		contentEl.empty();
 	}
 }

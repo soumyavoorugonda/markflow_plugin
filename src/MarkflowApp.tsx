@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import type { MarkflowData, PersistedPath, RectElement, Element } from "./types";
+import React, { useState, useRef } from "react";
+import type { MarkflowData, RectElement, Element } from "./types";
 
 type Point = { x: number; y: number };
 type PathElement = {
@@ -48,16 +48,12 @@ export default function MarkflowApp(
   const [rects, setRects] = useState<RectElement[]>(
     initialData.elements
       .filter((e) => e.type === "rect")
-      .map((r) => r as RectElement)
+      .map((r) => r)
   );
 
   const [currentRect, setCurrentRect] = useState<RectElement | null>(null);
   const rectStartRef = useRef<Point | null>(null);
-  const persistTimeout = useRef<number | null>(null);
-  // const isDrawingRef = useRef(false);
   const initialElements = initialData.elements ?? [];
-  const [elements, setElements] = useState<Element[]>(initialElements);
-
 
 
   function getPoint(evt: React.MouseEvent<SVGSVGElement, MouseEvent>) {
@@ -313,28 +309,6 @@ export default function MarkflowApp(
       setPaths(nextPaths);
     }
 }
-
-
-  function hitTest(el: Element, p: Point): boolean {
-    switch (el.type) {
-      case "path":
-        return el.points.some(pt => isPointNear(p, pt, ERASER_RADIUS));
-
-      case "rect":
-        return (
-          p.x >= el.x &&
-          p.x <= el.x + el.width &&
-          p.y >= el.y &&
-          p.y <= el.y + el.height
-        );
-
-      case "circle":
-        return Math.hypot(p.x - el.cx, p.y - el.cy) <= el.r;
-
-      case "arrow":
-        return el.points.some(pt => isPointNear(p, pt, ERASER_RADIUS));
-    }
-  }
 
 
   return (

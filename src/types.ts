@@ -1,9 +1,9 @@
 export type Point = { x: number; y: number };
 
-export type PersistedPath = {
-  type: "path";
-  points: Point[];
-};
+// export type PersistedPath = {
+//   type: "path";
+//   points: Point[];
+// };
 
 export type MarkflowElement =
   | {

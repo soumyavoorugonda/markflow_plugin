@@ -18,7 +18,7 @@ export default class MarkFlow extends Plugin {
 		// This creates an icon in the left ribbon.
 		this.addRibbonIcon('pencil', "Insert markflow block", () => {
 			// Called when the user clicks the icon.
-			this.app.workspace.trigger("insert-markflow-block");
+			this.app.workspace.trigger("insert-block");
 		});
 
 		this.addCommand({

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import type { MarkflowData, RectElement, Element } from "./types";
+import type { MarkflowData, RectElement} from "./types";
 
 type Point = { x: number; y: number };
 type PathElement = {
@@ -53,7 +53,6 @@ export default function MarkflowApp(
 
   const [currentRect, setCurrentRect] = useState<RectElement | null>(null);
   const rectStartRef = useRef<Point | null>(null);
-  const initialElements = initialData.elements ?? [];
 
 
   function getPoint(evt: React.MouseEvent<SVGSVGElement, MouseEvent>) {
